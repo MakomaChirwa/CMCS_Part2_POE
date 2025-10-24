@@ -11,7 +11,7 @@ namespace CMCS.Controllers
     public class CoordinatorController : Controller
     {
         private readonly ApplicationDbContext _db;
-        public CoordinatorController(ApplicationDbContext db){ _db=db; }
+        public CoordinatorController(ApplicationDbContext db) { _db = db; }
 
         public async Task<IActionResult> PreApprove()
         {

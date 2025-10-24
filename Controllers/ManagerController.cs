@@ -11,7 +11,7 @@ namespace CMCS.Controllers
     public class ManagerController : Controller
     {
         private readonly ApplicationDbContext _db;
-        public ManagerController(ApplicationDbContext db){ _db=db; }
+        public ManagerController(ApplicationDbContext db) { _db = db; }
 
         public async Task<IActionResult> Approve()
         {
