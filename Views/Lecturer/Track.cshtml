@@ -1,0 +1,10 @@
+@model IEnumerable<CMCS.Models.Claim>
+<h2>Your Claims</h2>
+<table>
+<thead><tr><th>Id</th><th>Amount</th><th>Status</th><th>Submitted</th></tr></thead>
+<tbody>
+@foreach(var c in Model){
+    <tr><td>@c.Id</td><td>@(c.HoursWorked*c.HourlyRate)</td><td>@c.Status</td><td>@c.SubmittedAt.ToLocalTime()</td></tr>
+}
+</tbody>
+</table>

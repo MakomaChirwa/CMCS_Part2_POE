@@ -1,0 +1,33 @@
+
+@{
+    Layout = null;
+}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CMCS - @ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body>
+    <header class="site-header">
+        <div class="container">
+            <a class="brand" href="~/">CMCS</a>
+            <nav class="nav">
+                <a href="/">Home</a>
+                <a href="/Account/Register">Register</a>
+                <a href="/Account/Login">Login</a>
+            </nav>
+        </div>
+    </header>
+    <main class="container">
+        @RenderBody()
+    </main>
+    <footer class="site-footer">
+        <div class="container">
+            <p>CMCS &copy; 2025</p>
+        </div>
+    </footer>
+</body>
+</html>

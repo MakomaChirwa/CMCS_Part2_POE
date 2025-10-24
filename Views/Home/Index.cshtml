@@ -1,0 +1,20 @@
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+<h1>CMCS - Home</h1>
+
+@if(SignInManager.IsSignedIn(User)){
+    <p>Welcome @User.Identity.Name</p>
+    <p>
+        @if(User.IsInRole("Lecturer"))
+        { 
+            <a href="/Lecturer/Submit">Submit Claim</a><a href="/Lecturer/Track">Track Claims</a> 
+        }
+        @if(User.IsInRole("ProgrammeCoordinator")){ <a href="/Coordinator/PreApprove">Pre-Approve Claims</a> }
+        @if(User.IsInRole("AcademicManager")){ <a href="/Manager/Approve">Approve Claims</a> }
+    </p>
+    <form asp-controller="Account" asp-action="Logout" method="post"><button type="submit">Logout</button></form>
+} else {
+    <p><a href="/Account/Register">Register</a> | <a href="/Account/Login">Login</a></p>
+}      

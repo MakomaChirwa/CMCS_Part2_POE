@@ -1,0 +1,9 @@
+@model CMCS.Models.Claim
+<h2>Submit Claim</h2>
+<form asp-action="Submit" method="post" enctype="multipart/form-data">
+    <div><label>Hours Worked</label><input asp-for="HoursWorked" /></div>
+    <div><label>Hourly Rate</label><input asp-for="HourlyRate" /></div>
+    <div><label>Notes</label><textarea asp-for="Notes"></textarea></div>
+    <div><label>Upload</label><input type="file" name="upload" /></div>
+    <button type="submit">Submit</button>
+</form>

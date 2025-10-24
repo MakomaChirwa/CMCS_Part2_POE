@@ -1,0 +1,22 @@
+@model IEnumerable<CMCS.Models.Claim>
+<h2>Approve Claims</h2>
+<table>
+<thead><tr><th>Id</th><th>Lecturer</th><th>Amount</th><th>Action</th></tr></thead>
+<tbody>
+@foreach(var c in Model){
+    <tr>
+        <td>@c.Id</td><td>@c.LecturerId</td><td>@(c.HoursWorked*c.HourlyRate)</td>
+        <td>
+            <form asp-action="Approve" method="post" style="display:inline">
+                <input type="hidden" name="id" value="@c.Id" />
+                <button name="approve" value="true">Approve</button>
+            </form>
+            <form asp-action="Approve" method="post" style="display:inline">
+                <input type="hidden" name="id" value="@c.Id" />
+                <button name="approve" value="false">Reject</button>
+            </form>
+        </td>
+    </tr>
+}
+</tbody>
+</table>
