@@ -49,7 +49,7 @@ namespace CMCS.Controllers
             }
 
             // Auto-calc payment
-            model.TotalAmount = Math.Round(model.HoursWorked * model.HourlyRate, 2);
+            model.TotalPayment = (double)Math.Round(model.HoursWorked * model.HourlyRate, 2);
 
             // Identify logged-in lecturer
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);

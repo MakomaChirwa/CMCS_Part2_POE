@@ -32,7 +32,6 @@ namespace CMCS.Models
 
         [NotMapped]
         public decimal Amount => HoursWorked * HourlyRate;
-
         public double TotalPayment { get; set; }
         public string Notes { get; set; }
 
