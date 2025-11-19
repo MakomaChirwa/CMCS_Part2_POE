@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using CMCS.Data;
+using CMCS.Models; 
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using System.Linq;
