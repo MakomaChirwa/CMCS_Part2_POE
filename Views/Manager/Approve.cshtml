@@ -1,22 +1,103 @@
-@model IEnumerable<CMCS.Models.Claim>
-<h2>Approve Claims</h2>
-<table>
-<thead><tr><th>Id</th><th>Lecturer</th><th>Amount</th><th>Action</th></tr></thead>
-<tbody>
-@foreach(var c in Model){
-    <tr>
-        <td>@c.Id</td><td>@c.LecturerId</td><td>@(c.HoursWorked*c.HourlyRate)</td>
-        <td>
-            <form asp-action="Approve" method="post" style="display:inline">
-                <input type="hidden" name="id" value="@c.Id" />
-                <button name="approve" value="true">Approve</button>
-            </form>
-            <form asp-action="Approve" method="post" style="display:inline">
-                <input type="hidden" name="id" value="@c.Id" />
-                <button name="approve" value="false">Reject</button>
-            </form>
-        </td>
-    </tr>
+@model List<CMCS.Models.Claim>
+
+@{
+    ViewData["Title"] = "Final Approval – Academic Manager";
 }
-</tbody>
+
+<h2 class="mb-4">Claims Awaiting Final Approval</h2>
+
+@if (TempData["AutomationError"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["AutomationError"]
+    </div>
+}
+
+<table class="table table-bordered table-striped">
+    <thead class="table-dark">
+        <tr>
+            <th>Lecturer</th>
+            <th>Hours Worked</th>
+            <th>Hourly Rate</th>
+            <th>Total Amount</th>
+            <th>Automation Checks</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var claim in Model)
+        {
+            <tr>
+                <td>@claim.LecturerName</td>
+                <td>@claim.HoursWorked</td>
+                <td>R @claim.HourlyRate</td>
+                <td><strong>R @claim.TotalAmount</strong></td>
+
+                <!-- AUTOMATION PANEL -->
+                <td>
+                    @if (claim.AutomationMessages != null)
+                    {
+                        foreach (var msg in claim.AutomationMessages)
+                        {
+                            if (msg.Contains("ERROR"))
+                            {
+                                <div class="alert alert-danger p-1 mb-1">
+                                    <strong>? ERROR:</strong> @msg.Replace("ERROR:", "").Trim()
+                                </div>
+                            }
+                            else if (msg.Contains("WARNING"))
+                            {
+                                <div class="alert alert-warning p-1 mb-1">
+                                    <strong>? WARNING:</strong> @msg.Replace("WARNING:", "").Trim()
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="alert alert-success p-1 mb-1">
+                                    ? @msg
+                                </div>
+                            }
+                        }
+                    }
+                </td>
+
+                <!-- APPROVAL ACTIONS -->
+                <td>
+                    <form method="post" asp-action="Approve">
+                        <input type="hidden" name="id" value="@claim.Id" />
+
+                        @if (claim.AutomationMessages.Any(m => m.Contains("ERROR")))
+                        {
+                            <button type="submit" name="approve" value="false"
+                                    class="btn btn-danger btn-sm">
+                                Reject (Critical Errors)
+                            </button>
+                        }
+                        else
+                        {
+                            <button type="submit" name="approve" value="true"
+                                    class="btn btn-success btn-sm mb-1">
+                                Approve
+                            </button>
+                            <button type="submit" name="approve" value="false"
+                                    class="btn btn-secondary btn-sm">
+                                Reject
+                            </button>
+                        }
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
 </table>
+
+<style>
+    .alert {
+        font-size: 0.85rem;
+    }
+
+    table td {
+        vertical-align: top;
+    }
+</style>

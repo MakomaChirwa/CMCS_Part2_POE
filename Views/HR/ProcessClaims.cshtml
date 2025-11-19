@@ -1,0 +1,88 @@
+﻿@model List<CMCS.Models.Claim>
+
+@{
+    ViewData["Title"] = "HR – Process Approved Claims";
+}
+
+<h2 class="mb-4">HR – Process Approved Claims</h2>
+
+@if (TempData["HRMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["HRMessage"]
+    </div>
+}
+
+<table class="table table-bordered table-striped">
+    <thead class="table-dark">
+        <tr>
+            <th>Lecturer</th>
+            <th>Hours Worked</th>
+            <th>Hourly Rate</th>
+            <th>Total Amount</th>
+            <th>Approval Info</th>
+            <th>Invoice</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var claim in Model)
+        {
+            <tr>
+                <td>@claim.LecturerId</td>
+                <td>@claim.HoursWorked</td>
+                <td>R @claim.HourlyRate</td>
+                <td><strong>R @claim.TotalPayment</strong></td>
+
+                <td>
+                    Approved by: <strong>@claim.ProcessedBy</strong> <br />
+                    Date: @claim.ProcessedAt
+                </td>
+
+                <td>
+                    @if (string.IsNullOrEmpty(claim.InvoiceNumber))
+                    {
+                        <span class="text-muted">No invoice generated</span>
+                    }
+                    else
+                    {
+                        <strong>@claim.InvoiceNumber</strong>
+                    }
+                </td>
+
+                <td>
+                    <form method="post" asp-action="MarkProcessed">
+                        <input type="hidden" name="id" value="@claim.Id" />
+
+                        @if (claim.IsPaid)
+                        {
+                            <span class="badge bg-success">Processed</span> <br />
+
+                            <button type="button" class="btn btn-primary btn-sm mt-2">
+                                Download Invoice (PDF)
+                            </button>
+                        }
+                        else
+                        {
+                            <button type="submit" class="btn btn-success btn-sm">
+                                Mark as Processed
+                            </button>
+                        }
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<style>
+    .alert {
+        font-size: 0.9rem;
+    }
+
+    table td {
+        vertical-align: top;
+    }
+</style>
+
