@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic; 
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -34,6 +35,11 @@ namespace CMCS.Models
 
         // Optional notes
         public string Notes { get; set; }
+
+        // Tracks all automated system actions for auditing
+        [NotMapped]
+        public List<string> AutomationMessages { get; set; } = new List<string>();
+
 
         // File uploaded by lecturer (optional)
         public string UploadedFilePath { get; set; }
