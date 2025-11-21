@@ -1,0 +1,68 @@
+﻿@model IEnumerable<Microsoft.AspNetCore.Identity.IdentityUser>
+
+@{
+    ViewData["Title"] = "Manage Lecturers";
+}
+
+<h2>Manage Lecturers</h2>
+
+@if (TempData["HRMessage"] != null)
+{
+    <div class="alert alert-success">@TempData["HRMessage"]</div>
+}
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Email</th>
+            <th>Username</th>
+            <th>Phone</th>
+            <th>Status</th>
+            <th style="width: 250px;">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            bool isLocked = user.LockoutEnd != null && user.LockoutEnd > DateTime.UtcNow;
+
+            <tr>
+                <td>@user.Email</td>
+                <td>@user.UserName</td>
+                <td>@user.PhoneNumber</td>
+                <td>
+                    @if (isLocked)
+                    {
+                        <span class="text-danger">Deactivated</span>
+                    }
+                    else
+                    {
+                        <span class="text-success">Active</span>
+                    }
+                </td>
+                <td>
+                    <a class="btn btn-primary btn-sm"
+                       href="/HR/EditLecturer/@user.Id">Edit</a>
+
+                    <form method="post" action="/HR/ResetPassword/@user.Id" style="display:inline;">
+                        <button class="btn btn-warning btn-sm" type="submit">Reset Password</button>
+                    </form>
+
+                    @if (isLocked)
+                    {
+                        <form method="post" action="/HR/Reactivate/@user.Id" style="display:inline;">
+                            <button class="btn btn-success btn-sm" type="submit">Reactivate</button>
+                        </form>
+                    }
+                    else
+                    {
+                        <form method="post" action="/HR/Deactivate/@user.Id" style="display:inline;">
+                            <button class="btn btn-danger btn-sm" type="submit">Deactivate</button>
+                        </form>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
