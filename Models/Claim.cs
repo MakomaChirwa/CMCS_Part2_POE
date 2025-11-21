@@ -16,6 +16,10 @@ namespace CMCS.Models
         [Required]
         public string LecturerId { get; set; }
 
+        [NotMapped]
+        public string LecturerName { get; set; }
+
+
         // Description or module name
         [Required]
         public string Description { get; set; } = string.Empty;

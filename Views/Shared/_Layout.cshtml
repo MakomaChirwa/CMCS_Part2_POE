@@ -1,7 +1,11 @@
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
 
 @{
     Layout = null;
 }
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -11,23 +15,75 @@
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
 <body>
+
     <header class="site-header">
         <div class="container">
             <a class="brand" href="~/">CMCS</a>
+
             <nav class="nav">
-                <a href="/">Home</a>
-                <a href="/Account/Register">Register</a>
-                <a href="/Account/Login">Login</a>
+
+                @* ------------------ If User Is Not Logged In ------------------ *@
+                @if (!SignInManager.IsSignedIn(User))
+                {
+                    <a href="/">Home</a>
+                    <a href="/Account/Register">Register</a>
+                    <a href="/Account/Login">Login</a>
+                }
+                else
+                {
+                    <span>Hello, @User.Identity.Name!</span>
+
+                    @* ===================== Lecturer Menu ===================== *@
+                    @if (User.IsInRole("Lecturer"))
+                    {
+                        <a asp-controller="LecturerClaims" asp-action="Index">My Claims</a>
+                        <a asp-controller="LecturerClaims" asp-action="Create">Submit Claim</a>
+                    }
+
+                    @* ===== Programme Coordinator (Pre-Approval) ===== *@
+                    @if (User.IsInRole("ProgrammeCoordinator"))
+                    {
+                        <a asp-controller="Coordinator" asp-action="Index">Pending Claims</a>
+                    }
+
+                    @* ========== Academic Manager ========== *@
+                    @if (User.IsInRole("AcademicManager"))
+                    {
+                        <a asp-controller="AcademicManager" asp-action="Index">Pre-Approved Claims</a>
+                    }
+
+                    @* =============== HR =============== *@
+                    @if (User.IsInRole("HR"))
+                    {
+                        <a asp-controller="HR" asp-action="Index">Ready for Payment</a>
+                    }
+
+                    @* =============== Admin =============== *@
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <a asp-controller="Admin" asp-action="Users">Manage Users</a>
+                    }
+
+                    @* Logout *@
+                    <form method="post" asp-controller="Account" asp-action="Logout" style="display:inline;">
+                        <button type="submit" class="btn-link">Logout</button>
+                    </form>
+                }
+
             </nav>
         </div>
     </header>
+
     <main class="container">
         @RenderBody()
     </main>
+
     <footer class="site-footer">
         <div class="container">
             <p>CMCS &copy; 2025</p>
         </div>
     </footer>
+
 </body>
 </html>
+
